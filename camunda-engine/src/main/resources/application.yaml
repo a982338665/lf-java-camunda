@@ -1,4 +1,12 @@
-spring.datasource.url: jdbc:h2:file:./camunda-h2-database
+#spring.datasource.url: jdbc:h2:file:./camunda-h2-database
+
+spring:
+  datasource:
+    # 创建数据库后自动生成：字符集-utf8mb4--UTF-8 Unicode  排序规则：utf8mb4_bin
+    url: jdbc:mysql://127.0.0.1:3306/camunda?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&nullCatalogMeansCurrent=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: password
 
 camunda.bpm.admin-user:
   id: admin
