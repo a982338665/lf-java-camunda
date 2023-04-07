@@ -22,5 +22,30 @@
         http://localhost:8080/start/Process_user_task
     4.登录B端（使用账号：xiaoming），查看任务列表，找到发起的请假流程，填写信息并完成
     5.登录B端（使用账号：wangbing），查看任务列表，找到发起的审批流程，填写信息并完成
+     
+# 3.service-task 业务任务
     
+# 4.流程引擎自动部署 流程任务
+    
+    1.resources目录下添加META-INF目录，并在目录下添加processes.xml
+    2.resources目录下添加bpmn目录，并将bpmn文件放于此目录，然后重启
+
+# 5.service-task 业务任务示例
+    
+    1.预约维修
+使用java class 模式实现业务任务。
+com.forestlake.camunda.servicetask.ReserveRepair
+在这里插入图片描述
+
+2.师傅上门维修
+使用Delegate expression实现业务任务，使用EL表达式接收实现任务的Bean，不用带方法名，默认调用execute方法。 实现任务的Bean需要implements JavaDeletegate接口。Java
+在这里插入图片描述
+
+3.公司电话回访
+使用Expression实现业务任务，使用EL表达式接收bean.callMethod(参数)的方式执行，也可以是一行普通的表达式，比如${a==b?a:b}，并且将方法执行结果存入Result Variable;
+相比Delegate expression ，此种方式实现任务的Bean无须实现implements JavaDeletegate接口，可以是任意方法，任意参数，需要用到流程执行的参数，可以直接传入execution.
+在这里插入图片描述
+
+4.查看评分
+使用上一步相同的Expression方式 ，相同的bean不同的方法，获取上一步调用方法存入的结果，变量名score.
 
