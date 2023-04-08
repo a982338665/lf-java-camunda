@@ -57,4 +57,9 @@
         2.启动external-task-starter-java
         3.访问http://localhost:8080/start/Process_external_task 发起流程
     
-# 7.
+# 7.restapi鉴权 & listener监听器
+    
+    1.鉴权：客户端接入引擎时需要配置账号密码
+    2.监听器：执行完成任务前后触发的事件
+    
+    
