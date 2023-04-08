@@ -39,13 +39,18 @@ public class Application {
 //        variables.put("isFree", false);
 //        runtimeService.startProcessInstanceByKey(processKey, variables);
         //==========================================================
+//        VariableMap variables = Variables.createVariables();
+//        identityService.setAuthenticatedUserId("xiaoming");
+//        List<String> leaders = new LinkedList<>();
+//        leaders.add("wangbing");
+//        leaders.add("zhangsan");
+//        leaders.add("wangwu");
+//        variables.put("leaders", leaders);
+//        variables.put("originDays", 10);
+//        runtimeService.startProcessInstanceByKey(processKey, variables);
+        //==========================================================
         VariableMap variables = Variables.createVariables();
         identityService.setAuthenticatedUserId("xiaoming");
-        List<String> leaders = new LinkedList<>();
-        leaders.add("wangbing");
-        leaders.add("zhangsan");
-        leaders.add("wangwu");
-        variables.put("leaders", leaders);
         variables.put("originDays", 10);
         runtimeService.startProcessInstanceByKey(processKey, variables);
 

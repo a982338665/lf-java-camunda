@@ -73,4 +73,8 @@
     nrOfCompletedInstances：已经完成的实例数量
     可以通过设置Completion Condition 为${ nrOfCompletedInstances == 2} 表示任意两个人完成审批
 
+# 10.脚本任务：js，groovy
+    
+    
+    
     
