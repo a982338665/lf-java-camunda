@@ -16,6 +16,7 @@
     <modules>
         <module>camunda-engine</module>
         <module>external-task-java</module>
+        <module>external-task-starter-java</module>
     </modules>
     <packaging>pom</packaging>
     <build>

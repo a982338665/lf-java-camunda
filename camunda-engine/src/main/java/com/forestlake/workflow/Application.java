@@ -2,6 +2,8 @@ package com.forestlake.workflow;
 
 import org.camunda.bpm.engine.IdentityService;
 import org.camunda.bpm.engine.RuntimeService;
+import org.camunda.bpm.engine.variable.VariableMap;
+import org.camunda.bpm.engine.variable.Variables;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -26,8 +28,13 @@ public class Application {
 
     @GetMapping("/start/{processKey}")
     public void start(@PathVariable(value = "processKey") String processKey) {
+//        identityService.setAuthenticatedUserId("xiaoming");
+//        runtimeService.startProcessInstanceByKey(processKey);
+        //==========================================================
         identityService.setAuthenticatedUserId("xiaoming");
-        runtimeService.startProcessInstanceByKey(processKey);
+        VariableMap variables = Variables.createVariables();
+        variables.put("isFree", false);
+        runtimeService.startProcessInstanceByKey(processKey, variables);
     }
 
 

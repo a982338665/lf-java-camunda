@@ -33,19 +33,28 @@
 # 5.service-task 业务任务示例
     
     1.预约维修
-使用java class 模式实现业务任务。
-com.forestlake.camunda.servicetask.ReserveRepair
-在这里插入图片描述
+        使用java class 模式实现业务任务。
+        com.forestlake.camunda.servicetask.ReserveRepair
+        在这里插入图片描述
+    2.师傅上门维修
+        使用Delegate expression实现业务任务，使用EL表达式接收实现任务的Bean，不用带方法名，默认调用execute方法。 实现任务的Bean需要implements JavaDeletegate接口。Java
+        在这里插入图片描述
+    3.公司电话回访
+        使用Expression实现业务任务，使用EL表达式接收bean.callMethod(参数)的方式执行，也可以是一行普通的表达式，比如${a==b?a:b}，并且将方法执行结果存入Result Variable;
+        相比Delegate expression ，此种方式实现任务的Bean无须实现implements JavaDeletegate接口，可以是任意方法，任意参数，需要用到流程执行的参数，可以直接传入execution.
+        在这里插入图片描述
+    4.查看评分
+        使用上一步相同的Expression方式 ，相同的bean不同的方法，获取上一步调用方法存入的结果，变量名score.
 
-2.师傅上门维修
-使用Delegate expression实现业务任务，使用EL表达式接收实现任务的Bean，不用带方法名，默认调用execute方法。 实现任务的Bean需要implements JavaDeletegate接口。Java
-在这里插入图片描述
-
-3.公司电话回访
-使用Expression实现业务任务，使用EL表达式接收bean.callMethod(参数)的方式执行，也可以是一行普通的表达式，比如${a==b?a:b}，并且将方法执行结果存入Result Variable;
-相比Delegate expression ，此种方式实现任务的Bean无须实现implements JavaDeletegate接口，可以是任意方法，任意参数，需要用到流程执行的参数，可以直接传入execution.
-在这里插入图片描述
-
-4.查看评分
-使用上一步相同的Expression方式 ，相同的bean不同的方法，获取上一步调用方法存入的结果，变量名score.
-
+# 6.外部任务（external-task）- 常用 微服务订阅
+    
+    1.流程引擎：创建外部任务实例
+    2.外部程序：根据topic订阅拉取
+    3.外部程序&流程引擎：完成外部任务实例
+        业务处理失败时，会上报引擎，继续重试，待成功后流程继续向下
+    4.测试流程：
+        1.启动camunda-engine
+        2.启动external-task-starter-java
+        3.访问http://localhost:8080/start/Process_external_task 发起流程
+    
+# 7.
