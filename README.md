@@ -64,5 +64,13 @@
 
 # 8.go和python3.7实现
 
-# 9.
+# 9.多实例任务并行&串行
+    
+    在并行任务运行中有内置几个变量如下：
+    nrOfActiviteInstances：当前活动的实例数量，即还没有完成的实例数量
+    loopCounter ：循环计数器，办理人在列表中的索引
+    nrOfInstances：多实例任务中总共的实例数
+    nrOfCompletedInstances：已经完成的实例数量
+    可以通过设置Completion Condition 为${ nrOfCompletedInstances == 2} 表示任意两个人完成审批
+
     
