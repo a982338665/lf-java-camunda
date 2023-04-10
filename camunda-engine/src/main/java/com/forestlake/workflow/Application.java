@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.LinkedList;
+import java.util.List;
+
 @SpringBootApplication
 @RestController
 public class Application {
@@ -52,12 +55,18 @@ public class Application {
         runtimeService.startProcessInstanceByKey(processKey, variables);
 
     }
+
     @GetMapping("/1/{processKey}")
     public void start01(@PathVariable(value = "processKey") String processKey) {
         VariableMap variables = Variables.createVariables();
         identityService.setAuthenticatedUserId("xiaoming");
         variables.put("originDays", 10);
         variables.put("isFree", false);
+        List<String> leaders = new LinkedList<>();
+        leaders.add("wangbing");
+        leaders.add("zhangsan");
+        leaders.add("wangwu");
+        variables.put("leaders", leaders);
         runtimeService.startProcessInstanceByKey(processKey, variables);
 
     }
