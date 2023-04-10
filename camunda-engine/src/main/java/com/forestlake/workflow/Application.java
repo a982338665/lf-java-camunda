@@ -67,6 +67,8 @@ public class Application {
         leaders.add("zhangsan");
         leaders.add("wangwu");
         variables.put("leaders", leaders);
+        variables.put("a", 10);
+        variables.put("b", 1);
         runtimeService.startProcessInstanceByKey(processKey, variables);
 
     }

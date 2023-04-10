@@ -44,4 +44,12 @@ public class TelCallService {
         execution.setVariable("004", "004");
     }
 
+    public void caculate(DelegateExecution execution) {
+        System.out.println("进入业务任务005============================");
+        Map<String, Object> variables = execution.getVariables();
+        variables.forEach((k, v) -> {
+            System.out.println(k + "|||||" + v);
+        });
+    }
+
 }
