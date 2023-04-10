@@ -29,18 +29,19 @@ public class TelCallService {
         variables.forEach((k, v) -> {
             System.out.println(k + "|||||" + v);
         });
-        variables.put("003", "003");
+        execution.setVariable("003", "003");
         System.out.println("当前活动名称：" + currentActivityName + " 流程定义id: " + processDefinitionId);
         return 10;
     }
 
 
-    public void getScore(DelegateExecution execution){
-        System.out.println("进入业务任务003============================");
+    public void getScore(DelegateExecution execution) {
+        System.out.println("进入业务任务004============================");
         Map<String, Object> variables = execution.getVariables();
         variables.forEach((k, v) -> {
             System.out.println(k + "|||||" + v);
         });
+        execution.setVariable("004", "004");
     }
 
 }

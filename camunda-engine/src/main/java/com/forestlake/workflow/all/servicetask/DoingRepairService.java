@@ -23,7 +23,7 @@ public class DoingRepairService implements JavaDelegate {
         variables.forEach((k, v) -> {
             System.out.println(k + "|||||" + v);
         });
-        variables.put("002", "002");
+        execution.setVariable("002", "002");
         System.out.println("当前活动名称：" + currentActivityName + " 流程定义id: " + processDefinitionId);
     }
 }
