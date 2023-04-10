@@ -129,6 +129,7 @@ c=a+b;
     </bpmn:textAnnotation>
     <bpmn:association id="Association_0tjj399" sourceRef="Activity_1frn7z4" targetRef="TextAnnotation_1h2a9jg" />
   </bpmn:process>
+  <bpmn:message id="Message_1r2469t" name="Message_1r2469t" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_1vzpwj3">
       <bpmndi:BPMNShape id="TextAnnotation_0rdl3ip_di" bpmnElement="TextAnnotation_0rdl3ip">
