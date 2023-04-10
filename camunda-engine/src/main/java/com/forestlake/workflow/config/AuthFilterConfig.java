@@ -8,6 +8,9 @@ import javax.servlet.FilterRegistration;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
+/**
+ * 鉴权：使用auth2认证的账号密码认证
+ */
 @Configuration
 public class AuthFilterConfig implements ServletContextInitializer {
     @Override
