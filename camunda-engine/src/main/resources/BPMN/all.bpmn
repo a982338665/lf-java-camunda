@@ -71,6 +71,7 @@
       <bpmn:outgoing>Flow_0pib2hc</bpmn:outgoing>
       <bpmn:outgoing>Flow_02zqpfx</bpmn:outgoing>
       <bpmn:outgoing>Flow_1de2ozz</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0y4dnna</bpmn:outgoing>
     </bpmn:parallelGateway>
     <bpmn:sequenceFlow id="Flow_02h7dq9" sourceRef="Gateway_0adcwye" targetRef="Activity_1cv4msy" />
     <bpmn:sequenceFlow id="Flow_0vjpslz" sourceRef="Gateway_0adcwye" targetRef="Activity_1pyx6vs" />
@@ -236,6 +237,28 @@ c=a+b;
       <bpmn:incoming>Flow_1x14i65</bpmn:incoming>
       <bpmn:incoming>Flow_0ce0901</bpmn:incoming>
     </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_0y4dnna" sourceRef="Gateway_0adcwye" targetRef="Activity_02vrtes" />
+    <bpmn:userTask id="Activity_02vrtes" name="直接领导审批" camunda:assignee="wangbing">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="comment" label="审批意见" type="string" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0y4dnna</bpmn:incoming>
+      <bpmn:outgoing>Flow_0003c21</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:boundaryEvent id="Event_090vijw" name="定时边界任务" attachedToRef="Activity_02vrtes">
+      <bpmn:outgoing>Flow_0vdrg8j</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="TimerEventDefinition_1o3zges">
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT3M</bpmn:timeDuration>
+      </bpmn:timerEventDefinition>
+    </bpmn:boundaryEvent>
+    <bpmn:sequenceFlow id="Flow_0003c21" sourceRef="Activity_02vrtes" targetRef="Activity_0y0blv4" />
+    <bpmn:userTask id="Activity_0y0blv4" name="部门经理审批" camunda:assignee="zhangsan">
+      <bpmn:incoming>Flow_0003c21</bpmn:incoming>
+      <bpmn:incoming>Flow_0vdrg8j</bpmn:incoming>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_0vdrg8j" name="等待3min，不批转给部门经理" sourceRef="Event_090vijw" targetRef="Activity_0y0blv4" />
     <bpmn:textAnnotation id="TextAnnotation_0rdl3ip">
       <bpmn:text>java全类名</bpmn:text>
     </bpmn:textAnnotation>
@@ -414,6 +437,13 @@ c=a+b;
       <bpmndi:BPMNShape id="Activity_0pylpvl_di" bpmnElement="Activity_0n71vss">
         <dc:Bounds x="860" y="1340" width="100" height="80" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_00e5fcx_di" bpmnElement="Activity_02vrtes">
+        <dc:Bounds x="400" y="1490" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0bwka9a_di" bpmnElement="Activity_0y0blv4">
+        <dc:Bounds x="570" y="1490" width="100" height="80" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Association_1c7thph_di" bpmnElement="Association_1c7thph">
         <di:waypoint x="512" y="131" />
         <di:waypoint x="574" y="73" />
@@ -438,6 +468,12 @@ c=a+b;
         <di:waypoint x="520" y="457" />
         <di:waypoint x="550" y="457" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_03u0p3z_di" bpmnElement="Event_090vijw">
+        <dc:Bounds x="432" y="1552" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="417" y="1595" width="67" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_02h7dq9_di" bpmnElement="Flow_02h7dq9">
         <di:waypoint x="370" y="252" />
         <di:waypoint x="370" y="170" />
@@ -618,6 +654,24 @@ c=a+b;
         <di:waypoint x="820" y="1330" />
         <di:waypoint x="820" y="1380" />
         <di:waypoint x="860" y="1380" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0y4dnna_di" bpmnElement="Flow_0y4dnna">
+        <di:waypoint x="370" y="302" />
+        <di:waypoint x="370" y="1530" />
+        <di:waypoint x="400" y="1530" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0003c21_di" bpmnElement="Flow_0003c21">
+        <di:waypoint x="500" y="1530" />
+        <di:waypoint x="570" y="1530" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0vdrg8j_di" bpmnElement="Flow_0vdrg8j">
+        <di:waypoint x="450" y="1588" />
+        <di:waypoint x="450" y="1608" />
+        <di:waypoint x="620" y="1608" />
+        <di:waypoint x="620" y="1570" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="496" y="1616" width="78" height="27" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
