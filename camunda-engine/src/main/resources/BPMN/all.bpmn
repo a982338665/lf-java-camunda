@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1fuj7sf" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.9.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.18.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1fuj7sf" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.9.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.18.0">
   <bpmn:process id="Process_1vzpwj3" name="审批流程" isExecutable="true" camunda:versionTag="1">
     <bpmn:startEvent id="StartEvent_1" name="开始" camunda:initiator="starter">
       <bpmn:outgoing>Flow_0ygq7ru</bpmn:outgoing>
@@ -65,10 +65,11 @@
       <bpmn:outgoing>Flow_02h7dq9</bpmn:outgoing>
       <bpmn:outgoing>Flow_07pbumm</bpmn:outgoing>
       <bpmn:outgoing>Flow_0vjpslz</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1qxsid6</bpmn:outgoing>
     </bpmn:parallelGateway>
     <bpmn:sequenceFlow id="Flow_02h7dq9" sourceRef="Gateway_0adcwye" targetRef="Activity_1cv4msy" />
     <bpmn:sequenceFlow id="Flow_0vjpslz" sourceRef="Gateway_0adcwye" targetRef="Activity_1pyx6vs" />
-    <bpmn:userTask id="Activity_1pyx6vs" name="直接审批" camunda:assignee="${leader}">
+    <bpmn:userTask id="Activity_1pyx6vs" name="直接审批-串行" camunda:assignee="${leader}">
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="comment" label="审批意见" type="string" defaultValue="同意" />
@@ -76,6 +77,13 @@
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0vjpslz</bpmn:incoming>
       <bpmn:multiInstanceLoopCharacteristics isSequential="true" camunda:collection="${leaders}" camunda:elementVariable="leader" />
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_1qxsid6" sourceRef="Gateway_0adcwye" targetRef="Activity_1frn7z4" />
+    <bpmn:userTask id="Activity_1frn7z4" name="直接审批-并行" camunda:assignee="${leader}">
+      <bpmn:incoming>Flow_1qxsid6</bpmn:incoming>
+      <bpmn:multiInstanceLoopCharacteristics camunda:collection="${leaders}" camunda:elementVariable="leader">
+        <bpmn:completionCondition xsi:type="bpmn:tFormalExpression">${(nrOfCompletedInstances==2)}</bpmn:completionCondition>
+      </bpmn:multiInstanceLoopCharacteristics>
     </bpmn:userTask>
     <bpmn:textAnnotation id="TextAnnotation_0rdl3ip">
       <bpmn:text>java全类名</bpmn:text>
@@ -97,6 +105,10 @@
       <bpmn:text>后置监听</bpmn:text>
     </bpmn:textAnnotation>
     <bpmn:association id="Association_1s8lbgo" sourceRef="Activity_08uuwwm" targetRef="TextAnnotation_1v6876f" />
+    <bpmn:textAnnotation id="TextAnnotation_1h2a9jg">
+      <bpmn:text>并行，任意两个审批完成，即结束</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_0tjj399" sourceRef="Activity_1frn7z4" targetRef="TextAnnotation_1h2a9jg" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_1vzpwj3">
@@ -118,6 +130,10 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="TextAnnotation_1v6876f_di" bpmnElement="TextAnnotation_1v6876f">
         <dc:Bounds x="550" y="280" width="100" height="30" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_1h2a9jg_di" bpmnElement="TextAnnotation_1h2a9jg">
+        <dc:Bounds x="550" y="442" width="100" height="55" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
@@ -155,7 +171,11 @@
         <dc:Bounds x="345" y="252" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_000w259_di" bpmnElement="Activity_1pyx6vs">
-        <dc:Bounds x="420" y="350" width="100" height="80" />
+        <dc:Bounds x="420" y="330" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1qwleo5_di" bpmnElement="Activity_1frn7z4">
+        <dc:Bounds x="420" y="430" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Association_1c7thph_di" bpmnElement="Association_1c7thph">
         <di:waypoint x="512" y="131" />
@@ -176,6 +196,10 @@
       <bpmndi:BPMNEdge id="Association_1s8lbgo_di" bpmnElement="Association_1s8lbgo">
         <di:waypoint x="520" y="284" />
         <di:waypoint x="550" y="288" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_0tjj399_di" bpmnElement="Association_0tjj399">
+        <di:waypoint x="520" y="465" />
+        <di:waypoint x="550" y="462" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_02h7dq9_di" bpmnElement="Flow_02h7dq9">
         <di:waypoint x="370" y="252" />
@@ -216,8 +240,13 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0vjpslz_di" bpmnElement="Flow_0vjpslz">
         <di:waypoint x="370" y="302" />
-        <di:waypoint x="370" y="390" />
-        <di:waypoint x="420" y="390" />
+        <di:waypoint x="370" y="370" />
+        <di:waypoint x="420" y="370" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1qxsid6_di" bpmnElement="Flow_1qxsid6">
+        <di:waypoint x="370" y="302" />
+        <di:waypoint x="370" y="470" />
+        <di:waypoint x="420" y="470" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
