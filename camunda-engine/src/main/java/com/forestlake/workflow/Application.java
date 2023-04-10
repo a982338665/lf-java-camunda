@@ -57,6 +57,7 @@ public class Application {
         VariableMap variables = Variables.createVariables();
         identityService.setAuthenticatedUserId("xiaoming");
         variables.put("originDays", 10);
+        variables.put("isFree", false);
         runtimeService.startProcessInstanceByKey(processKey, variables);
 
     }
