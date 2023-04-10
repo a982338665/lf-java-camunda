@@ -52,4 +52,11 @@ public class TelCallService {
         });
     }
 
+    public void test002(DelegateExecution execution, String leader) {
+        System.out.println("加2人自动审批============================" + leader);
+        Map<String, Object> variables = execution.getVariables();
+        System.err.println(variables.size());
+        System.out.println("加2人自动审批============================");
+    }
+
 }

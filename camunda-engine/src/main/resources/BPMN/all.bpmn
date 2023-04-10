@@ -12,6 +12,7 @@
           <camunda:formField id="reason" label="事由" type="string" />
           <camunda:formField id="startTime" label="开始时间" type="date" />
           <camunda:formField id="endTime" label="结束时间" type="date" />
+          <camunda:formField id="days" label="请假天数" type="long" defaultValue="0" />
         </camunda:formData>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0ygq7ru</bpmn:incoming>
@@ -67,6 +68,7 @@
       <bpmn:outgoing>Flow_0vjpslz</bpmn:outgoing>
       <bpmn:outgoing>Flow_1qxsid6</bpmn:outgoing>
       <bpmn:outgoing>Flow_0rqxvyc</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1de2ozz</bpmn:outgoing>
     </bpmn:parallelGateway>
     <bpmn:sequenceFlow id="Flow_02h7dq9" sourceRef="Gateway_0adcwye" targetRef="Activity_1cv4msy" />
     <bpmn:sequenceFlow id="Flow_0vjpslz" sourceRef="Gateway_0adcwye" targetRef="Activity_1pyx6vs" />
@@ -103,6 +105,39 @@ c=a+b;
     <bpmn:sequenceFlow id="Flow_1ln23zx" sourceRef="Activity_0kwqcgm" targetRef="Activity_00wo5g6" />
     <bpmn:serviceTask id="Activity_00wo5g6" name="查看计算结果" camunda:expression="#{telCall02.caculate(execution)}">
       <bpmn:incoming>Flow_1ln23zx</bpmn:incoming>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="Gateway_1b91um3">
+      <bpmn:incoming>Flow_1de2ozz</bpmn:incoming>
+      <bpmn:outgoing>Flow_06rjtsh</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0qd825e</bpmn:outgoing>
+      <bpmn:outgoing>Flow_03gscdm</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_1de2ozz" sourceRef="Gateway_0adcwye" targetRef="Gateway_1b91um3" />
+    <bpmn:sequenceFlow id="Flow_06rjtsh" name="days&#60;=3天" sourceRef="Gateway_1b91um3" targetRef="Activity_1vnajk8">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${days&lt;=3}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0qd825e" name="3&#60;days&#60;=5天" sourceRef="Gateway_1b91um3" targetRef="Activity_1i8lduy">
+      <bpmn:extensionElements>
+        <camunda:executionListener delegateExpression="${addLeaders}" event="take" />
+      </bpmn:extensionElements>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${days&gt;3 &amp;&amp; days&lt;=5}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_03gscdm" name="days&#62;5" sourceRef="Gateway_1b91um3" targetRef="Activity_1uygm6n">
+      <bpmn:extensionElements>
+        <camunda:executionListener delegateExpression="${addLeaders}" event="take" />
+      </bpmn:extensionElements>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${days&gt;5}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:serviceTask id="Activity_1vnajk8" name="自动审批" camunda:delegateExpression="${test001}">
+      <bpmn:incoming>Flow_06rjtsh</bpmn:incoming>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="Activity_1i8lduy" name="加2人自动审批" camunda:expression="${telCall02.test002(execution,leader)}">
+      <bpmn:incoming>Flow_0qd825e</bpmn:incoming>
+      <bpmn:multiInstanceLoopCharacteristics isSequential="true" camunda:collection="${leaders}" camunda:elementVariable="leader" />
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="Activity_1uygm6n" name="加3人自动审批" camunda:expression="${telCall02.test003(execution,leader)}">
+      <bpmn:incoming>Flow_03gscdm</bpmn:incoming>
+      <bpmn:multiInstanceLoopCharacteristics camunda:collection="${leaders}" camunda:elementVariable="leader" />
     </bpmn:serviceTask>
     <bpmn:textAnnotation id="TextAnnotation_0rdl3ip">
       <bpmn:text>java全类名</bpmn:text>
@@ -208,6 +243,20 @@ c=a+b;
       <bpmndi:BPMNShape id="Activity_1ecg6ij_di" bpmnElement="Activity_00wo5g6">
         <dc:Bounds x="680" y="510" width="100" height="80" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1b91um3_di" bpmnElement="Gateway_1b91um3" isMarkerVisible="true">
+        <dc:Bounds x="415" y="615" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1w4wpuk_di" bpmnElement="Activity_1vnajk8">
+        <dc:Bounds x="570" y="600" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1ouh2i7_di" bpmnElement="Activity_1i8lduy">
+        <dc:Bounds x="570" y="700" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0ot4sc0_di" bpmnElement="Activity_1uygm6n">
+        <dc:Bounds x="570" y="800" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Association_1c7thph_di" bpmnElement="Association_1c7thph">
         <di:waypoint x="512" y="131" />
         <di:waypoint x="574" y="73" />
@@ -291,6 +340,34 @@ c=a+b;
       <bpmndi:BPMNEdge id="Flow_1ln23zx_di" bpmnElement="Flow_1ln23zx">
         <di:waypoint x="650" y="550" />
         <di:waypoint x="680" y="550" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1de2ozz_di" bpmnElement="Flow_1de2ozz">
+        <di:waypoint x="370" y="302" />
+        <di:waypoint x="370" y="640" />
+        <di:waypoint x="415" y="640" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_06rjtsh_di" bpmnElement="Flow_06rjtsh">
+        <di:waypoint x="465" y="640" />
+        <di:waypoint x="570" y="640" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="491" y="622" width="55" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0qd825e_di" bpmnElement="Flow_0qd825e">
+        <di:waypoint x="440" y="665" />
+        <di:waypoint x="440" y="740" />
+        <di:waypoint x="570" y="740" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="485" y="723" width="67" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_03gscdm_di" bpmnElement="Flow_03gscdm">
+        <di:waypoint x="440" y="665" />
+        <di:waypoint x="440" y="840" />
+        <di:waypoint x="570" y="840" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="500" y="823" width="37" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
