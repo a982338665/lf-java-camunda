@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -69,6 +70,11 @@ public class Application {
         variables.put("leaders", leaders);
         variables.put("a", 10);
         variables.put("b", 1);
+        List<String> videoNames = new ArrayList<>();
+        videoNames.add("电影");
+        videoNames.add("电视剧");
+        videoNames.add("综艺节目");
+        variables.put("videoNames",videoNames);
         runtimeService.startProcessInstanceByKey(processKey, variables);
 
     }
